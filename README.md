@@ -1,25 +1,30 @@
-### Hi there 👋
+<img align="right" width="33%" style="margin-bottom: 2em" src="https://owlbertsio-resized.s3.amazonaws.com/Popper.psd.full.png">
 
-- 🔭 I build WordPress templates and figure out functionality for freelancing clients.
-- 🌱 I would like to continue working as a software developer and learn AI technologies.
-- 👯 I’m open to collaborate with others on any project.
-- :100: I am a fully certified Full-Stack Engineer.
+# Hi, we're ReadMe! :wave:
 
----
+<a href="https://readme.com"><img src="https://raw.githubusercontent.com/readmeio/.github/main/oss-badge.svg"></a>
 
-🧰 Technical Toolbox
-<p>
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">
-  <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E">
-  <img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
-  <img src="https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white">
-  <img src="https://img.shields.io/badge/mocha.js-323330?style=for-the-badge&logo=mocha&logoColor=Brown">
-  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white">
-  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white">
-  <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
-  <img src="https://img.shields.io/badge/WordPress-%23117AC9.svg?style=for-the-badge&logo=WordPress&logoColor=white">
-  <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white">
-</p>
+Welcome to our GitHub org! [At ReadMe][readme], we want developers to succeed. That's why building thoughtful developer experiences is at the core of everything we do.
+
+### And by “developer”, we mean a _lot_ of people…
+
+:memo:   [Anyone who builds API docs](https://readme.com/customers) on ReadMe. <br>
+:monocle_face:   People who use API docs built on ReadMe. <br>
+:floppy_disk:   Folks who use any of our open source libraries. <br>
+:dancers:   [The ReadMe team](https://readme.com/about).[^come-work-with-us] <br>
+:rainbow:   Honestly? [Pretty much everyone](http://amiarealdeveloper.com)!
+
+### We :blue_heart: open source, y'all.
+
+Running an open source project? Let us know and and [we'll get you a ReadMe license for free](https://docs.readme.com/main/docs/plans-and-pricing#plans-for-open-source-projects)! We're proud members of [the OpenAPI Initiative](https://www.openapis.org/) and [the Linux Foundation](https://www.linuxfoundation.org/), and maintain dozens of open source tools for working with APIs, the OpenAPI Specification, Markdown, and more.
+
+### But most of all?
+
+We're excited to see what you build with ReadMe! :owl:
+
+[readme]: https://readme.com
+[api]: https://github.com/readmeio/api 'magically generates SDKs from an OpenAPI definition :magic_wand:'
+[markdown]: https://github.com/readmeio/markdown 'our ReadMe-flavored Markdown parser and React-based rendering engine :writing_hand:'
+[rdme]: https://github.com/readmeio/rdme 'the official ReadMe CLI and GitHub Action :shell:'
+
+[^come-work-with-us]: Are you as excited about APIs as we are? Do you care deeply (maybe _too_ deeply) about documentation? Do you geek out over amazing web design? [**We're hiring**](https://readme.com/careers), and we'd love to work with you! 🎉

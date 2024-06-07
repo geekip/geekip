@@ -7,4 +7,4 @@ I'm a product manager and a hobbyist developer.
 - 2022.06.18 - [AHP层次分析法的应用场景及代码实现](https://blog.yangfei.site/tech/ahp.html)    
 - 2022.06.13 - [产品经理需掌握的十大模型](https://blog.yangfei.site/ued/pm-model.html)    
  
-*- Updated on 2024.06.07 12:59:09*
+*- Updated on 2024.06.07 21:06:28*

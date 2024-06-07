@@ -14,7 +14,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install xmlstarlet
-      run: sudo apt-get install -y xmlstarlet
+      run: |
+        sudo timedatectl set-timezone Asia/Shanghai
+        sudo apt-get install -y xmlstarlet
 
     - name: Generate a file
       run: |

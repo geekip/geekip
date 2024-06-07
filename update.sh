@@ -39,6 +39,6 @@ for i in "${!title_array[@]}"; do
 done
 
 current_date=$(date +"%Y.%m.%d %H:%M:%S")
-echo ""
+echo " "
 echo "*- Updated on $current_date*" >> "$OUTPUT_FILE"
 

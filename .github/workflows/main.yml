@@ -16,6 +16,7 @@ jobs:
         echo "Hello, GitHub Actions!" > myfile.txt
     - name: Commit the generated file
       run: |
+        git diff
         git config --global user.email "mail@yangfei.site"
         git config --global user.name "geekip"
         git add myfile.txt

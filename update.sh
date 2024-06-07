@@ -36,6 +36,6 @@ echo "### Latest blog posts" >> "$OUTPUT_FILE"
 # 将内容格式化并写入输出文件
 for i in "${!title_array[@]}"; do
   # 将日期格式化为[Y-m-d]
-  formatted_date=$(date -d "${date_array[$i]}" +"[%Y-%m-%d]" || echo "Invalid Date")
-  echo "- $formatted_date . ${title_array[$i]}(${link_array[$i]})    " >> "$OUTPUT_FILE"
+  formatted_date=$(date -d "${date_array[$i]}" +"%Y.%m.%d" || echo "Invalid Date")
+  echo "- $formatted_date - [${title_array[$i]}](${link_array[$i]})    " >> "$OUTPUT_FILE"
 done

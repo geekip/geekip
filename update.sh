@@ -1,7 +1,9 @@
+max_posts=5
 OUTPUT_FILE="README.md"
+rss_url="https://blog.yangfei.site/feed/"
 
 echo "Downloading RSS feed..."
-rss_content=$(curl -s "https://blog.yangfei.site/feed/")
+rss_content=$(curl -s "$rss_url")
 
 if [ -z "$rss_content" ]; then
   echo "Failed to download RSS content."
@@ -23,12 +25,14 @@ IFS=$'\n' read -rd '' -a title_array <<<"$titles"
 IFS=$'\n' read -rd '' -a link_array <<<"$links"
 IFS=$'\n' read -rd '' -a date_array <<<"$pub_dates"
 
-echo "### Hi there 👋" > "$OUTPUT_FILE"
-echo "I'm a product manager and a hobbyist developer." >> "$OUTPUT_FILE"
-echo "### Latest blog posts (updated on $current_date)" >> "$OUTPUT_FILE"
+cat > "$OUTPUT_FILE" << EOF
+### Hi there 👋
+I'm a product manager and a hobbyist developer.
+
+### Latest blog posts
+EOF
 
 count=0
-max_posts=5
 for i in "${!title_array[@]}"; do
   if [ $count -ge $max_posts ]; then
     break
@@ -41,4 +45,3 @@ done
 current_date=$(date +"%Y.%m.%d %H:%M:%S")
 echo " " >> "$OUTPUT_FILE"
 echo "*- Updated on $current_date*" >> "$OUTPUT_FILE"
-

@@ -25,7 +25,7 @@ IFS=$'\n' read -rd '' -a date_array <<<"$pub_dates"
 
 echo "### Hi there 👋" > "$OUTPUT_FILE"
 echo "I'm a product manager and a hobbyist developer." >> "$OUTPUT_FILE"
-echo "### Latest blog posts" >> "$OUTPUT_FILE"
+echo "### Latest blog posts (updated on $current_date)" >> "$OUTPUT_FILE"
 
 count=0
 max_posts=5
@@ -37,3 +37,7 @@ for i in "${!title_array[@]}"; do
   echo "- $formatted_date - [${title_array[$i]}](${link_array[$i]})    " >> "$OUTPUT_FILE"
   ((count++))
 done
+
+current_date=$(date +"%Y.%m.%d %H:%M:%S")
+echo "*- Updated on $current_date*" >> "$OUTPUT_FILE"
+

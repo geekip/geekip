@@ -1,38 +1,54 @@
 name: Generate File
- 
+
 on:
   push:
-    branches: [ main ]
- 
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *' # 每天运行一次
+
 jobs:
   build:
     runs-on: ubuntu-latest
- 
+
     steps:
-    - name: Install packages
-      run: |
-        sudo apt-get install xmlstarlet
-    - uses: actions/checkout@v2
- 
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install xmlstarlet
+      run: sudo apt-get install -y xmlstarlet
+
     - name: Generate a file
       run: |
-        
+        set -e
+
         # 定义输出Markdown文件
         OUTPUT_FILE="README.md"
-        
+
         # 使用curl下载RSS XML文件内容
         rss_content=$(curl -s "https://blog.yangfei.site/feed/")
-        
+
+        # 检查是否成功下载RSS内容
+        if [ -z "$rss_content" ]; then
+          echo "Failed to download RSS content."
+          exit 1
+        fi
+
         # 使用xmlstarlet解析XML并提取文章标题、链接地址、发布时间
         titles=$(echo "$rss_content" | xmlstarlet sel -t -m "//item/title" -v . -n)
         links=$(echo "$rss_content" | xmlstarlet sel -t -m "//item/link" -v . -n)
         pub_dates=$(echo "$rss_content" | xmlstarlet sel -t -m "//item/pubDate" -v . -n)
-        
+
+        # 检查是否成功提取内容
+        if [ -z "$titles" ] || [ -z "$links" ] || [ -z "$pub_dates" ]; then
+          echo "Failed to extract necessary data from RSS feed."
+          exit 1
+        fi
+
         # 将提取内容按行分割并放入数组中
         IFS=$'\n' read -rd '' -a title_array <<<"$titles"
         IFS=$'\n' read -rd '' -a link_array <<<"$links"
         IFS=$'\n' read -rd '' -a date_array <<<"$pub_dates"
-        
+
         echo "### Hi there 👋" > "$OUTPUT_FILE"
         echo "I'm a product manager and a hobbyist developer." >> "$OUTPUT_FILE"
         echo "### Latest blog posts" >> "$OUTPUT_FILE"
@@ -43,11 +59,17 @@ jobs:
           formatted_date=$(date -d "${date_array[$i]}" +"[%Y-%m-%d]")
           echo "$formatted_date - [${title_array[$i]}](${link_array[$i]})" >> "$OUTPUT_FILE"
         done
-    - name: Commit the generated file
+
+    - name: Commit and push changes
       run: |
-        git diff
+        set -e
         git config --global user.email "mail@yangfei.site"
         git config --global user.name "geekip"
-        git add README.md
-        git commit -m "update info"
-        git push
+
+        if [ -n "$(git status --porcelain)" ]; then
+          git add README.md
+          git commit -m "Update README with latest blog posts"
+          git push
+        else
+          echo "No changes to commit."
+        fi

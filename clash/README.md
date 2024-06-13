@@ -1,0 +1,32 @@
+# clash-ruleset
+
+- **直连域名列表 direct.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/direct.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/direct.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/direct.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/direct.yaml)
+- **代理域名列表 proxy.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/proxy.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/proxy.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/proxy.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/proxy.yaml)
+- **广告域名列表 reject.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/reject.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/reject.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/reject.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/reject.yaml)
+- **私有网络专用域名列表 private.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/private.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/private.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/private.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/private.yaml)
+- **Apple 在中国大陆可直连的域名列表 apple.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/apple.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/apple.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/apple.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/apple.yaml)
+- **iCloud 域名列表 icloud.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/icloud.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/icloud.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/icloud.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/icloud.yaml)
+- **[慎用]Google 在中国大陆可直连的域名列表 google.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/google.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/google.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/google.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/google.yaml)
+- **GFWList 域名列表 gfw.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/gfw.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/gfw.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/gfw.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/gfw.yaml)
+- **局域网 IP 及保留 IP 地址列表 lancidr.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/lancidr.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/lancidr.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/lancidr.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/lancidr.yaml)
+- **中国大陆 IP 地址列表 cncidr.yaml**：
+  - [https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/cncidr.yaml](https://raw.githubusercontent.com/geekip/geekip/clash/ruleset/cncidr.yaml)
+  - [https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/cncidr.yaml](https://cdn.jsdelivr.net/gh/geekip/geekip/clash/ruleset/cncidr.yaml)

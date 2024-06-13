@@ -2,106 +2,110 @@ name: Build Padavan
 
 on:
   workflow_dispatch:
+
 env:
-  cn_apple: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" 
-  cn_icloud: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" 
-  cn_google: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" 
-  cn_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt" 
-  lan_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/private.txt" 
-  direct: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt" 
-  gfw: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt" 
-  private: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" 
-  proxy: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt" 
-  reject: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt" 
+  cn_apple: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf"
+  cn_icloud: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt"
+  cn_google: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf"
+  cn_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt"
+  lan_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/private.txt"
+  direct: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
+  gfw: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt"
+  private: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt"
+  proxy: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
+  reject: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt"
   dist_dir: "clash/ruleset"
+
 jobs:
- build:
+  build:
     runs-on: ubuntu-20.04
+
     steps:
       - uses: actions/checkout@v3.1.0
+
       - name: Prepare environment
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
-          
+
       - name: Generate apple.yaml file
-          run: |
-            echo "payload:" > apple.yaml
-            curl -sSL ${cn_apple} | perl -ne '/^server=\/([^\/]+)\// && print "  - |+.$1|\n"' | sed "s/|/'/g" >> apple.yaml
+        run: |
+          echo "payload:" > apple.yaml
+          curl -sSL ${cn_apple} | perl -ne '/^server=\/([^\/]+)\// && print "  - |+.$1|\n"' | sed "s/|/'/g" >> apple.yaml
 
-        - name: Generate icloud.yaml file
-          run: |
-            echo "payload:" > icloud.yaml
-            curl -sSL ${cn_icloud} | grep -E "^(full|domain):" | awk -F ':' '{printf "  - |+.%s|\n", $2}' | sed "s/|/'/g" >> icloud.yaml
+      - name: Generate icloud.yaml file
+        run: |
+          echo "payload:" > icloud.yaml
+          curl -sSL ${cn_icloud} | grep -E "^(full|domain):" | awk -F ':' '{printf "  - |+.%s|\n", $2}' | sed "s/|/'/g" >> icloud.yaml
 
-        - name: Generate google.yaml file
-          run: |
-            echo "payload:" > google.yaml
-            curl -sSL ${cn_google} | perl -ne '/^server=\/([^\/]+)\// && print "  - |+.$1|\n"' | sed "s/|/'/g" >> google.yaml
+      - name: Generate google.yaml file
+        run: |
+          echo "payload:" > google.yaml
+          curl -sSL ${cn_google} | perl -ne '/^server=\/([^\/]+)\// && print "  - |+.$1|\n"' | sed "s/|/'/g" >> google.yaml
 
-        - name: Generate cncidr.yaml file
-          run: |
-            echo "payload:" > cncidr.yaml
-            curl -sSL ${cn_cidr} | perl -ne '/(.+\/\d+)/ && print "  - |$1|\n"' | sed "s/|/'/g" >> cncidr.yaml  
+      - name: Generate cncidr.yaml file
+        run: |
+          echo "payload:" > cncidr.yaml
+          curl -sSL ${cn_cidr} | perl -ne '/(.+\/\d+)/ && print "  - |$1|\n"' | sed "s/|/'/g" >> cncidr.yaml
 
-        - name: Generate lancidr.yaml file
-          run: |
-            echo "payload:" > lancidr.yaml
-            curl -sSL ${lan_cidr} | perl -ne '/(.+\/\d+)/ && print "  - |$1|\n"' | sed "s/|/'/g" >> lancidr.yaml
+      - name: Generate lancidr.yaml file
+        run: |
+          echo "payload:" > lancidr.yaml
+          curl -sSL ${lan_cidr} | perl -ne '/(.+\/\d+)/ && print "  - |$1|\n"' | sed "s/|/'/g" >> lancidr.yaml
 
-        - name: Generate direct.yaml file
-          run: |
-            echo "payload:" > direct.yaml
-            curl -sSL ${direct} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |$2|\n"' | sed "s/|/'/g" >> direct.yaml
-            curl -sSL ${direct} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> direct.yaml
+      - name: Generate direct.yaml file
+        run: |
+          echo "payload:" > direct.yaml
+          curl -sSL ${direct} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |$2|\n"' | sed "s/|/'/g" >> direct.yaml
+          curl -sSL ${direct} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> direct.yaml
 
-        - name: Generate gfw.yaml file
-          run: |
-            echo "payload:" > gfw.yaml
-            curl -sSL ${gfw} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> gfw.yaml
+      - name: Generate gfw.yaml file
+        run: |
+          echo "payload:" > gfw.yaml
+          curl -sSL ${gfw} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> gfw.yaml
 
-        - name: Generate private.yaml file
-          run: |
-            echo "payload:" > private.yaml
-            curl -sSL ${private} | awk -F ':' '/^full:/ {printf "  - |%s|\n", $2}' | sed "s/|/'/g" >> private.yaml
-            curl -sSL ${private} | awk -F ':' '/^domain:/ {printf "  - |+.%s|\n", $2}' | sed "s/|/'/g" >> private.yaml
+      - name: Generate private.yaml file
+        run: |
+          echo "payload:" > private.yaml
+          curl -sSL ${private} | awk -F ':' '/^full:/ {printf "  - |%s|\n", $2}' | sed "s/|/'/g" >> private.yaml
+          curl -sSL ${private} | awk -F ':' '/^domain:/ {printf "  - |+.%s|\n", $2}' | sed "s/|/'/g" >> private.yaml
 
-        - name: Generate proxy.yaml file
-          run: |
-            echo "payload:" > proxy.yaml
-            curl -sSL ${proxy} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |$2|\n"' | sed "s/|/'/g" >> proxy.yaml
-            curl -sSL ${proxy} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> proxy.yaml
+      - name: Generate proxy.yaml file
+        run: |
+          echo "payload:" > proxy.yaml
+          curl -sSL ${proxy} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |$2|\n"' | sed "s/|/'/g" >> proxy.yaml
+          curl -sSL ${proxy} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> proxy.yaml
 
-        - name: Generate reject.yaml file
-          run: |
-            echo "payload:" > reject.yaml
-            curl -sSL ${reject} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> reject.yaml
+      - name: Generate reject.yaml file
+        run: |
+          echo "payload:" > reject.yaml
+          curl -sSL ${reject} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "  - |+.$2|\n"' | sed "s/|/'/g" >> reject.yaml
 
-        - name: Generate openai.yaml file
-          run: |
-            echo "payload:" > openai.yaml
-            echo "  - '+.openai.com'" >> openai.yaml
-            echo "  - '+.claude.ai'" >> openai.yaml
-            echo "  - '+.oaistatic.com'" >> openai.yaml
-            echo "  - '+.oaiusercontent.com'" >> openai.yaml
-            
-        - name: Move files to ruleset directory
-          run: |
-            mkdir -p ${{ env.dist_dir }}
-            cp *.yaml ${{ env.dist_dir }}
+      - name: Generate openai.yaml file
+        run: |
+          echo "payload:" > openai.yaml
+          echo "  - '+.openai.com'" >> openai.yaml
+          echo "  - '+.claude.ai'" >> openai.yaml
+          echo "  - '+.oaistatic.com'" >> openai.yaml
+          echo "  - '+.oaiusercontent.com'" >> openai.yaml
 
-        - name: Commit and Push
-          run: |
-            cd ${{ env.dist_dir }} || exit 1
-            git config --global user.email "mail@yangfei.site"
-            git config --global user.name "geekip"
-            git add .
-            git commit -m "auto update"
-            git push
-            
-        - name: Purge jsdelivr CDN
-          run: |
-            cd ${{ env.dist_dir }} || exit 1
-            for file in $(ls); do
-              curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.dist_dir }}/${file}"
-            done
+      - name: Move files to ruleset directory
+        run: |
+          mkdir -p ${{ env.dist_dir }}
+          cp *.yaml ${{ env.dist_dir }}
+
+      - name: Commit and Push
+        run: |
+          cd ${{ env.dist_dir }} || exit 1
+          git config --global user.email "mail@yangfei.site"
+          git config --global user.name "geekip"
+          git add .
+          git commit -m "auto update"
+          git push
+
+      - name: Purge jsdelivr CDN
+        run: |
+          cd ${{ env.dist_dir }} || exit 1
+          for file in $(ls); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.dist_dir }}/${file}"
+          done

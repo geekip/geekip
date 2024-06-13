@@ -1,0 +1,5 @@
+payload:
+  - '+.openai.com'
+  - '+.claude.ai'
+  - '+.oaistatic.com'
+  - '+.oaiusercontent.com'

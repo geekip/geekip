@@ -1,4 +1,4 @@
-name: Build Padavan
+name: Update Clash Ruleset
 
 on:
   workflow_dispatch:

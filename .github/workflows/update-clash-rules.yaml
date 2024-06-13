@@ -2,6 +2,8 @@ name: Update Clash Ruleset
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
 
 env:
   cn_apple: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf"

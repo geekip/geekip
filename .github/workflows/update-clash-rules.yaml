@@ -1,10 +1,9 @@
-name: Generate RULE-SET for Premium Edition of Clash
+name: Generate Clash Rule-SET for Premium Edition of Clash
 
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * 1'
-
 jobs:
   build:
     runs-on: ubuntu-latest

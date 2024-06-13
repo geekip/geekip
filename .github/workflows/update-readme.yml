@@ -1,4 +1,4 @@
-name: Generate Readme
+name: Update Readme
 
 on:
   workflow_dispatch:
@@ -20,8 +20,8 @@ jobs:
 
     - name: Generate a file
       run: |
-        chmod +x ./update.sh
-        ./update.sh
+        chmod +x ./readme/update.sh
+        ./readme/update.sh
 
     - name: Commit and push changes
       run: |

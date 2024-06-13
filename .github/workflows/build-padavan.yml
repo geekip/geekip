@@ -1,0 +1,112 @@
+name: Build Padavan
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '分支或版本号，默认master'
+        required: true
+        default: 'master'
+      target:
+        description: '目标路由器'
+        required: true
+        type: choice
+        default: 'RM2100'
+        options:
+          - 360P2
+          - 5K-W20
+          - A3004NS
+          - B70
+          - CR660x
+          - DIR-878
+          - DIR-882
+          - E8820V2
+          - HC5661A
+          - HC5761A
+          - HC5861B
+          - JCG-836PRO
+          - JCG-AC860M
+          - JCG-Q20
+          - JCG-Y2
+          - K2P-USB
+          - K2P
+          - K2P_nano
+          - MI-3
+          - MI-3C
+          - MI-4
+          - MI-MINI
+          - MI-NANO
+          - MI-R3G
+          - MI-R3P-breed
+          - MI-R3P
+          - MI-R4A
+          - MR2600
+          - MSG1500
+          - MZ-R13
+          - MZ-R13P
+          - NETGEAR-BZV
+          - NETGEAR-CHJ
+          - NEWIFI-MINI
+          - NEWIFI3
+          - OYE-001
+          - PSG1208
+          - PSG1218
+          - PSG1218_nano
+          - R2100
+          - R6220
+          - RM2100
+          - RT-AC1200GU
+          - WDR7300
+          - WR1200JS
+          - XY-C1
+          - ZTE_E8820S
+env:
+  repo_url: "https://github.com/hanwckf/rt-n56u"
+  source_dir: "/opt/rt-n56u"
+jobs:
+ build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare environment
+        run: |
+          sudo apt update
+          sudo apt install libtool-bin gperf python3-docutils autopoint gettext
+          sudo timedatectl set-timezone "Asia/Shanghai"
+      
+      - name: Clone source
+        run: |
+          git clone -b ${{ inputs.branch || 'master' }} ${{ env.repo_url }} ${{ env.source_dir }}
+
+      - name: Config target
+        run: |
+          DIY_FILE="${GITHUB_WORKSPACE}/padavan/config.sh"
+          if [ -f "$DIY_FILE" ]; then
+            chmod +x $DIY_FILE
+            cd ${{ env.source_dir }}
+            sh $DIY_FILE
+          fi
+
+      - name: Prepare toolchain
+        run: |
+          cd ${{ env.source_dir }}/toolchain-mipsel
+          sh dl_toolchain.sh
+
+      - name: Start build
+        run: |
+          cd ${{ env.source_dir }}/trunk
+          fakeroot ./build_firmware_modify ${{ inputs.target }}
+          if [ $? = 0 ]; then 
+            mkdir -p /opt/bin
+            cp -f images/*.trx /opt/bin/${{ inputs.target }}.trx
+          else 
+            exit 1
+          fi
+          ./clear_tree >/dev/null 2>&1
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ inputs.target }}
+          path: /opt/bin/*.trx

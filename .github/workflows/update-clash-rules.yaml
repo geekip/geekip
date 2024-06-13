@@ -1,31 +1,30 @@
-name: Generate RULE-SET for Premium Edition of Clash
+name: Build Padavan
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * 1'
+env:
+  cn_apple: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" 
+  cn_icloud: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" 
+  cn_google: "https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" 
+  cn_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt" 
+  lan_cidr: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/private.txt" 
+  direct: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt" 
+  gfw: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt" 
+  private: "https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" 
+  proxy: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt" 
+  reject: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt" 
+  dist_dir: "clash/ruleset"
 jobs:
-  build:
-    runs-on: ubuntu-latest
+ build:
+    runs-on: ubuntu-20.04
     steps:
-      - name: Set variables
+      - uses: actions/checkout@v3.1.0
+      - name: Prepare environment
         run: |
-          echo "cn_apple=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
-          echo "cn_icloud=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" >> $GITHUB_ENV
-          echo "cn_google=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
-          echo "cn_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt" >> $GITHUB_ENV
-          echo "lan_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/private.txt" >> $GITHUB_ENV
-          echo "direct=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt" >> $GITHUB_ENV
-          echo "gfw=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt" >> $GITHUB_ENV
-          echo "private=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" >> $GITHUB_ENV
-          echo "proxy=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt" >> $GITHUB_ENV
-          echo "reject=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt" >> $GITHUB_ENV
-        shell: bash
+          sudo apt update
+          sudo timedatectl set-timezone "Asia/Shanghai"
           
-        - name: Checkout
-          uses: actions/checkout@v3.1.0
-
-        - name: Generate apple.yaml file
+      - name: Generate apple.yaml file
           run: |
             echo "payload:" > apple.yaml
             curl -sSL ${cn_apple} | perl -ne '/^server=\/([^\/]+)\// && print "  - |+.$1|\n"' | sed "s/|/'/g" >> apple.yaml
@@ -88,12 +87,12 @@ jobs:
             
         - name: Move files to ruleset directory
           run: |
-            mkdir -p clash/ruleset
-            cp *.yaml ./clash/ruleset
+            mkdir -p ${{ env.dist_dir }}
+            cp *.yaml ${{ env.dist_dir }}
 
         - name: Commit and Push
           run: |
-            cd clash/ruleset || exit 1
+            cd ${{ env.dist_dir }} || exit 1
             git config --global user.email "mail@yangfei.site"
             git config --global user.name "geekip"
             git add .
@@ -102,7 +101,7 @@ jobs:
             
         - name: Purge jsdelivr CDN
           run: |
-            cd clash/ruleset || exit 1
+            cd ${{ env.dist_dir }} || exit 1
             for file in $(ls); do
-              curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/clash/ruleset/${file}"
+              curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.dist_dir }}/${file}"
             done

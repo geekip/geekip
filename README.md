@@ -8,4 +8,4 @@ I'm a product manager and a hobbyist developer.
 - 2022.06.13 - [产品经理需掌握的十大模型](https://blog.yangfei.site/ued/pm-model.html)    
 - 2022.05.18 - [Docker安装Syncthing实现跨平台文件同步](https://blog.yangfei.site/tech/syncthing.html)    
  
-*- Updated on 2024.07.01 14:17:10*
+*- Updated on 2024.07.02 14:16:51*

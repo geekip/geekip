@@ -1,4 +1,4 @@
-### Hi there 👋
+### 𝒉𝒊 𝒕𝒉𝒆𝒓𝒆 👋
 I'm a product manager and a hobbyist developer.
 
 ### Latest blog posts

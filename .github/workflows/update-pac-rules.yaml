@@ -66,8 +66,8 @@ jobs:
       - name: Generate parse
         run: |
           declare -A files  
-          files[DOMAIN]="dommin.yaml"  
-          files[DOMAIN-SUFFIX]="dommin.yaml"  
+          files[DOMAIN]="domain.yaml"  
+          files[DOMAIN-SUFFIX]="domain.yaml"  
           files[DOMAIN-KEYWORD]="keyword.yaml"  
           files[IP-CIDR]="ip.yaml"  
             
@@ -94,13 +94,13 @@ jobs:
 
       - name: Generate cn_domain
         run: |
-          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> dommin.yaml
-          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> dommin.yaml
+          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
 
       - name: Generate output
         run: |
           echo ""> rules.json
-          yq -o json -I 0 -i 'load("dommin.yaml") as $f | .dommin=$f ' rules.json
+          yq -o json -I 0 -i 'load("domain.yaml") as $f | .domain=$f ' rules.json
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' rules.json
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' rules.json
 

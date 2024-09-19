@@ -16,6 +16,7 @@ env:
   cn_domain: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   cn_domain_acl4: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
   src_txt: "src.txt"
+  dist_dir: "pac"
 
 jobs:
   build:
@@ -103,14 +104,23 @@ jobs:
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' rules.json
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' rules.json
 
+      - name: Move files to rules directory
+        run: |
+          mkdir -p ${{ env.dist_dir }}
+          cp rules.json ${{ env.dist_dir }}
+
       - name: Commit and Push
         run: |
+          cd ${{ env.dist_dir }} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
-          git add ./rules.json
+          git add .
           git commit -m "auto update"
           git push
 
       - name: Purge jsdelivr CDN
         run: |
-          curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/pac/rules.json"
+          cd ${{ env.dist_dir }} || exit 1
+          for file in $(ls); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.dist_dir }}/${file}"
+          done

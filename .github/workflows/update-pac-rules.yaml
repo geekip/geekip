@@ -1,0 +1,116 @@
+name: Update Pac Ruleset
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+    
+env:
+  local: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list"
+  cn_apple: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list"
+  cn_google: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list"
+  cn_microsoft: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list"
+  cn_company_ip: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list"
+  cn_media: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list"
+  cn_ip: "https://www.ipdeny.com/ipblocks/data/aggregated/cn-aggregated.zone"
+  cn_domain: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
+  cn_domain_acl4: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
+  src_txt: "src.txt"
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3.1.0
+
+      - name: Prepare environment
+        run: |
+          sudo apt update
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+      - name: Generate local
+        run: |
+          curl -sSL ${local} > ${src_txt}
+
+      - name: Generate cn_apple
+        run: |
+          curl -sSL ${cn_apple} >> ${src_txt}
+
+      - name: Generate cn_google
+        run: |
+          curl -sSL ${cn_google} >> ${src_txt}
+
+      - name: Generate cn_microsoft
+        run: |
+          curl -sSL ${cn_microsoft} >> ${src_txt}
+          echo "">> ${src_txt}
+
+      - name: Generate cn_company_ip
+        run: |
+          curl -sSL ${cn_company_ip} >> ${src_txt}
+
+      - name: Generate cn_media
+        run: |
+          curl -sSL ${cn_media} >> ${src_txt}
+
+      - name: Generate cn_domain_acl4
+        run: |
+          curl -sSL ${cn_domain_acl4} >> ${src_txt}
+
+      - name: Generate cn_ip
+        run: |
+          curl -sSL ${cn_ip} | perl -ne '/(.+\/\d+)/ && print "IP-CIDR,$1,no-resolve\n"' >> ${src_txt}
+
+      - name: Generate parse
+        run: |
+          declare -A files  
+          files[DOMAIN]="dommin.yaml"  
+          files[DOMAIN-SUFFIX]="dommin.yaml"  
+          files[DOMAIN-KEYWORD]="keyword.yaml"  
+          files[IP-CIDR]="ip.yaml"  
+            
+          : > "${files[DOMAIN]}"  
+          : > "${files[DOMAIN-SUFFIX]}"  
+          : > "${files[DOMAIN-KEYWORD]}"  
+          : > "${files[IP-CIDR]}"  
+
+          while IFS=',' read -r prefix value; do  
+            if [[ -n "$prefix" && -n "${files[$prefix]}" ]]; then  
+              file="${files[$prefix]}"
+              if [[ "$prefix" == "IP-CIDR"* ]]; then  
+                value=$(echo "$value" | cut -d',' -f1)
+                if [[ $value =~ ([0-9.]+)/([0-9]+) ]]; then  
+                  ip=${BASH_REMATCH[1]}  
+                  prefix_length=${BASH_REMATCH[2]}  
+                  echo "- [$ip,$prefix_length]" >> "$file"
+                fi
+              else
+                echo "- $value" >> "$file"
+              fi     
+            fi  
+          done < "${src_txt}"
+
+      - name: Generate cn_domain
+        run: |
+          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> dommin.yaml
+          curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> dommin.yaml
+
+      - name: Generate output
+        run: |
+          echo ""> rules.json
+          yq -o json -I 0 -i 'load("dommin.yaml") as $f | .dommin=$f ' rules.json
+          yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' rules.json
+          yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' rules.json
+
+      - name: Commit and Push
+        run: |
+          git config --global user.email "mail@yangfei.site"
+          git config --global user.name "geekip"
+          git add ./rules.json
+          git commit -m "auto update"
+          git push
+
+      - name: Purge jsdelivr CDN
+        run: |
+          curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/pac/rules.json"

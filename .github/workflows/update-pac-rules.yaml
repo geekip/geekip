@@ -25,49 +25,49 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
-      - name: Prepare environment
+      - name: 准备环境
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
 
-      - name: Generate local
+      - name: 局域网地址
         run: |
           curl -sSL ${local} > ${src_txt}
 
-      - name: Generate cn_apple
+      - name: 苹果中国
         run: |
           curl -sSL ${cn_apple} >> ${src_txt}
 
-      - name: Generate cn_google
+      - name: 谷歌中国
         run: |
           curl -sSL ${cn_google} >> ${src_txt}
 
-      - name: Generate cn_microsoft
+      - name: 微软中国
         run: |
           curl -sSL ${cn_microsoft} >> ${src_txt}
           echo "">> ${src_txt}
 
-      - name: Generate cn_company_ip
+      - name: 中国云服务商ip段
         run: |
           curl -sSL ${cn_company_ip} >> ${src_txt}
 
-      - name: Generate cn_media
+      - name: 中国媒体
         run: |
           curl -sSL ${cn_media} >> ${src_txt}
 
-      - name: Generate cn_domain_acl4
+      - name: 中国域名
         run: |
           curl -sSL ${cn_domain_acl4} >> ${src_txt}
 
-      - name: Generate cn_ip
+      - name: 中国IP
         run: |
           curl -sSL ${cn_ip} | perl -ne '/(.+\/\d+)/ && print "IP-CIDR,$1,no-resolve\n"' >> ${src_txt}
 
-      - name: Generate parse
+      - name: 解析合并
         run: |
           declare -A files  
           files[DOMAIN]="domain.yaml"  
-          files[DOMAIN-SUFFIX]="domain.yaml"  
+          files[DOMAIN-SUFFIX]="domain_suffix.yaml"  
           files[DOMAIN-KEYWORD]="keyword.yaml"  
           files[IP-CIDR]="ip.yaml"  
             
@@ -97,19 +97,17 @@ jobs:
       #     curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
       #     curl -sSL ${cn_domain} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
 
-      - name: Generate output
+      - name: 输出json文件
         run: |
           echo ""> rules.json
           yq -o json -I 0 -i 'load("domain.yaml") as $f | .domain=$f ' rules.json
+          yq -o json -I 0 -i 'load("domain_suffix.yaml") as $f | .domain_suffix=$f ' rules.json
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' rules.json
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' rules.json
-
-      - name: Move files to rules directory
-        run: |
           mkdir -p ${{ env.dist_dir }}
           cp rules.json ${{ env.dist_dir }}
 
-      - name: Commit and Push
+      - name: 提交文件
         run: |
           cd ${{ env.dist_dir }} || exit 1
           git config --global user.email "mail@yangfei.site"
@@ -118,7 +116,7 @@ jobs:
           git commit -m "auto update"
           git push
 
-      - name: Purge jsdelivr CDN
+      - name: 推送到jsdelivr CDN
         run: |
           cd ${{ env.dist_dir }} || exit 1
           for file in $(ls); do

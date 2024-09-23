@@ -117,6 +117,7 @@ jobs:
 
       - name: 提交文件
         run: |
+          ls -R
           mkdir -p ${{ env.DIST_DIR }}
           cp ${{ env.DIST_CONFIG }} ${{ env.DIST_DIR }}
           cd ${{ env.DIST_DIR }} || exit 1

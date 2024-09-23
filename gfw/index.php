@@ -2,17 +2,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-define('DIR_ROOT', __DIR__);
-// 缓存目录
-define('DIR_CACHE', DIR_ROOT . '/.cache');
 // 基础配置文件
-define('BASE_CONFIG_FILE', DIR_ROOT . '/base.yaml');
+define('BASE_CONFIG_FILE', 'base.yaml');
 // 基础配置缓存文件
-define('CONFIG_FILE', DIR_CACHE . '/config');
+define('CONFIG_FILE', 'config');
 // 订阅缓存文件
-define('FEED_SOURCE', DIR_CACHE . '/feed.source.yaml');
+define('FEED_SOURCE', 'feed.source.yaml');
 // 中国规则
-define('RULES_CN_CACHE', DIR_CACHE . '/cn.json');
+define('RULES_CN_CACHE', 'cn.json');
 
 // 节点国家
 define('COUNTRIES', [

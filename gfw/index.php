@@ -304,7 +304,7 @@ function Get_feed_config() {
   if(!file_exists(FEED_SOURCE) && FEED_URL && FEED_URL!=''){
     $fh = fopen(FEED_SOURCE, 'w');
     if (!$fh) return false;
-    $ch = curl_init($feed_url); 
+    $ch = curl_init(FEED_URL); 
     curl_setopt_array($ch, [
       CURLOPT_FILE => $fh, 
       CURLOPT_FOLLOWLOCATION => true,

@@ -120,7 +120,7 @@ jobs:
           cd ${{ env.WORKSPACE }} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
-          git add .
+          git add config
           git commit -m "auto update"
           git push
 

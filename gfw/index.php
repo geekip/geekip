@@ -289,7 +289,7 @@ function Get_feed_config() {
   $feed_scource = file_get_contents(FEED_SOURCE);
   list($header, $body) = explode("\r\n\r\n", $feed_scource, 2);
   $feed = YamlOrJson2array($body);
-  
+  $config['rules'] = $feed['rules'];
   // 其他节点
   $miss = [];
   // 订阅信息

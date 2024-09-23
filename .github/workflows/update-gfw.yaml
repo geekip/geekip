@@ -137,4 +137,4 @@ jobs:
       - name: 推送到jsdelivr CDN
         run: |
           cd ${{ env.DIST_DIR }} || exit 1
-          curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.DIST_DIR }}/${{ env.DIST_CONFIG }}"
+          curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.WORKSPACE }}/${{ env.DIST_CONFIG }}"

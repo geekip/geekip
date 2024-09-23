@@ -287,7 +287,7 @@ function Remove_multiple_rules($rules) {
 function Make_base_config() {
   $config = YamlOrJsonFile2array(BASE_CONFIG_FILE);
   $config['rules'] = Formate_rules($config['rules']);
-  $files = glob("./rules/*.yaml");
+  $files = glob(__DIR__ . "/rules/*.yaml");
   foreach ($files as $path) {
     $filename = pathinfo($path, PATHINFO_FILENAME);
     $rule = YamlOrJsonFile2array($path);
@@ -301,7 +301,7 @@ function Make_base_config() {
 
 function Get_feed_config() {
   // 获取订阅
-  if(!file_exists(FEED_SOURCE) && FEED_URL && FEED_URL!=''){
+  if(FEED_URL && FEED_URL!=''){
     $fh = fopen(FEED_SOURCE, 'w');
     if (!$fh) return false;
     $ch = curl_init($feed_url); 
@@ -407,17 +407,4 @@ function encrypt($data, $key) {
   return base64_encode($encrypted . '::' . $iv);
 }
 
-// function getClientArgs(){
-//   global $argv;
-//   array_shift($argv);
-//   $args = array();
-//   array_walk($argv, function($v ,$k) use(&$args){
-//     @list($key, $value) = @explode('=', $v);
-//     $args[$key] = $value;
-//   });
-//   return $args;
-// }
-
-// $args = getClientArgs();
-// Get_base_config($args['feedurl'],$args['key']);
 Get_base_config();

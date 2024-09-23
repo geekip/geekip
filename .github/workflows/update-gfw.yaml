@@ -16,8 +16,8 @@ env:
   CN_DOMAIN_URL: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   CN_DOMAIN_ACL4_URL: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
   WORKSPACE: "gfw"
-  SRC_CN: ".cache-cn.txt"
-  DIST_CN: ".cache-cn.json"
+  SRC_CN: "cn.txt"
+  DIST_CN: "cn.json"
   DIST_CONFIG: "config"
 
 jobs:

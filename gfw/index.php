@@ -2,9 +2,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-define('FEED_URL', $_ENV['GFW_FEED_URL']);
+// define('FEED_URL', $_ENV['GFW_FEED_URL']);
 
-define('KEY', $_ENV['GFW_KEY']);
+// define('KEY', $_ENV['GFW_KEY']);
 
 // 基础配置文件
 define('BASE_CONFIG_FILE',  __DIR__ . '/base.yaml');

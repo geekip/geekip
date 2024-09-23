@@ -1,0 +1,207 @@
+# HTTP(S) 和 SOCKS4(A)/SOCKS5 代理服务共用一个端口 clash/singbox
+mixed-port: 7890
+
+# HTTP(S) 代理服务端口
+# port: 7891
+
+# SOCKS5 代理服务端口
+# socks-port: 7892
+
+# Linux 和 macOS 的透明代理服务端口 (TCP 和 TProxy UDP 重定向)
+# redir-port: 7893
+
+# Linux 的透明代理服务端口 (TProxy TCP 和 TProxy UDP)
+# tproxy-port: 7894
+
+# sing-box 
+vmess-port: 7891
+vmess-uuid: bf000d23-0752-40b4-affe-68f7707a9661
+
+# 设置为 true 以允许来自其他 LAN IP 地址的连接
+allow-lan: true
+
+# 仅当 `allow-lan` 为 `true` 时有效
+# '*': 绑定所有 IP 地址
+# 127.0.0.1: 绑定单个 IPv4 地址
+# "[aaaa::a8aa:ff:fe09:57d8]": 绑定单个 IPv6 地址
+bind-address: "*"
+
+# Clash 路由工作模式
+# rule: 基于规则的数据包路由
+# global: 所有数据包将被转发到单个节点
+# direct: 直接将数据包转发到互联网
+# Script: 基于 Python3 的脚本功能
+mode: rule
+
+# 默认情况下, Clash 将日志打印到 STDOUT
+# 日志级别: silent / info / warning / error / debug
+log-level: silent
+
+# 当设置为 false 时, 解析器不会将主机名解析为 IPv6 地址
+# ipv6: false
+
+# RESTful Web API 监听地址
+external-controller: 0.0.0.0:9090
+
+# 配置目录的相对路径或静态 Web 资源目录的绝对路径. Clash core 将在
+# `http://{{external-controller}}/ui` 中提供服务.
+external-ui: ui
+
+# RESTful API 密钥 (可选)
+# 通过指定 HTTP 头 `Authorization: Bearer ${secret}` 进行身份验证
+# 如果RESTful API在 0.0.0.0 上监听, 务必设置一个 secret 密钥.
+secret: feifei520!!!
+
+# 出站网卡名称
+# interface-name: en0
+
+# 嗅探 TLS SNI
+experimental:
+  sniff-tls-sni: true
+
+profile:
+  # 将 `select` 手动选择 结果存储在 .cache 中 
+  # 储存 API 对策略组的选择，以供下次启动时使用
+  store-selected: true
+  # 储存 fakeip 映射表，域名再次发生连接时，使用原有映射地址
+  store-fake-ip: true
+
+# TCP并发
+tcp-concurrent: true
+
+dns:
+  enable: true
+  ipv6: false
+
+  # 是否查询系统 hosts
+  use-hosts: true
+
+  # 指定 Clash DNS 监听地址
+  listen: 0.0.0.0:3553
+
+  # 开启 fake-ip 模式
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+
+  # 需要直连的国内域名
+  fake-ip-filter:
+    - '*.lan'
+    - localhost.ptlogin2.qq.com
+
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+  # 指定上游公共 DNS
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+  # 后备域名解析服务器，一般情况下使用境外 DNS, 保证结果可信
+  fallback:
+    - https://doh.dns.sb/dns-query
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.twnic.tw/dns-query
+    - tls://8.8.8.8
+    - tls://1.1.1.1
+    
+  # 后备域名解析服务器筛选，满足条件的将使用 fallback 结果或只使用 fallback解析
+  fallback-filter:
+    # 是否启用 fallback filter
+    geoip: true
+    # 可选值为 国家缩写，默认值为 CN
+    geoip-code: CN
+    # 已污染域名
+    geosite:
+      - gfw
+    # 已污染IP段
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+    # 已污染域名
+    domain:
+      - '+.google.com'
+      - '+.facebook.com'
+      - '+.youtube.com'
+tun:
+  enable: true
+  stack: system
+  # tun 网卡名称
+  # device: utun
+  # 自动设置全局路由,可以自动将全局流量路由进入 tun 网卡
+  auto-route: true 
+  auto-redir: true
+  # 与 interface-name 冲突
+  auto-detect-interface: true 
+  # dns 劫持
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+    
+# 代理节点
+proxies: 
+  - name: 洛杉矶VMESS
+    type: vmess
+    server: 10.10.10.6
+    port: 7891
+    uuid: 8fbd47d0-897e-41c7-9201-1367834e73fd
+    alterId: 0
+    cipher: auto
+    udp: true
+  - name: 洛杉矶SOCKS5
+    type: socks5
+    server: 10.10.10.6
+    port: 7890
+  - name: 洛杉矶TOR
+    type: socks5
+    server: 10.10.10.6
+    port: 9050
+  - name: 订阅信息
+    type: vmess
+    server: 10.10.10.6
+    port: 7891
+    uuid: 8fbd47d0-897e-41c7-9201-1367834e73fd
+    alterId: 0
+    cipher: auto
+    udp: true
+
+# 代理策略组
+proxy-groups: 
+  - name: 自建服务
+    type: select
+    default: 洛杉矶VMESS
+    proxies:
+    - 洛杉矶VMESS
+    - 自动选择
+    - DIRECT
+    - REJECT
+    - 洛杉矶SOCKS5
+    - 洛杉矶TOR
+    - 订阅信息
+  - name: 节点选择
+    type: select
+    proxies:
+    - 自动选择
+    - DIRECT
+    - REJECT
+    - 洛杉矶VMESS
+    - 洛杉矶SOCKS5
+  - name: 自动选择
+    type: url-test
+    proxies:
+    - 洛杉矶VMESS
+    - 洛杉矶SOCKS5
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+  - name: 漏网之鱼
+    type: select
+    default: 自建服务
+    proxies:
+    - 节点选择
+    - 自动选择
+    - 自建服务
+    - DIRECT
+    - REJECT
+
+rules: []
+  

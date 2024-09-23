@@ -1,0 +1,30 @@
+# 个人
+- DOMAIN-SUFFIX,yangfei.site
+- DOMAIN-SUFFIX,cn
+
+# 公司
+- DOMAIN-SUFFIX,gzdict.cn
+- DOMAIN-SUFFIX,gzsuanli.com
+- DOMAIN-SUFFIX,zhixueyun.com
+- IP-CIDR,135.0.0.0/16
+- IP-CIDR,135.31.0.0/16
+
+# 头条
+- DOMAIN-SUFFIX,toutiaostatic.com
+
+# 腾讯
+- DOMAIN-SUFFIX,weixinbridge.com
+- DOMAIN-SUFFIX,tfogc.com
+- DOMAIN-SUFFIX,rumt-zh.com
+
+# 网易音乐
+- DOMAIN-SUFFIX,netease.im
+- DOMAIN-SUFFIX,zhuanzfx.com
+
+# 京东
+- DOMAIN-SUFFIX,jddebug.com
+- DOMAIN-SUFFIX,jdcloud-oss.com
+
+# 本地IP和国内IP
+- GEOIP,LAN
+- GEOIP,CN

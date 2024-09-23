@@ -32,9 +32,26 @@ jobs:
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
 
+      - name: 安装PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: yaml
+
       
+
+      - name: 解析合并
+        run: |
+          echo "<?php define('FEED_URL', '${{ secrets.GFW_FEED_URL }}');define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
+
+      # - name: Generate CN_DOMAIN_URL
+      #   run: |
+      #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+      #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+      - name: 解析配置
+        run: php run.php
 
       - name: 提交文件
         run: |
+          mkdir -p ${{ env.DIST_DIR }}
           ls -R
-

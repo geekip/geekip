@@ -32,12 +32,12 @@ jobs:
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
 
-      - name: Setup PHP  
-          uses: shivammathur/setup-php@v2  
-          with:  
-            php-version: '7.4'
-            extensions: yaml  
-
+      - name: 安装PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: yaml
+          
       - name: 局域网地址
         run: |
           curl -sSL ${local} > ${{ env.src_cn }}

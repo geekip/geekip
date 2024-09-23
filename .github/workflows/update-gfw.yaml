@@ -116,6 +116,7 @@ jobs:
 
       - name: 提交文件
         run: |
+          ls -R
           git diff
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"

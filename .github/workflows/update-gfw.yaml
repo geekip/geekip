@@ -31,7 +31,12 @@ jobs:
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
-          sudo apt-get install php php-yaml
+
+      - name: Setup PHP  
+          uses: shivammathur/setup-php@v2  
+          with:  
+            php-version: '7.4'
+            extensions: yaml  
 
       - name: 局域网地址
         run: |

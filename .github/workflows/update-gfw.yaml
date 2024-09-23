@@ -19,8 +19,6 @@ env:
   SRC_CN: "cn.txt"
   DIST_CN: "cn.json"
   DIST_CONFIG: "config"
-  GFW_FEED_URL: ${{ secrets.GFW_FEED_URL }}
-  GFW_KEY: ${{ secrets.GFW_KEY }}
 
 jobs:
   build:
@@ -112,16 +110,16 @@ jobs:
       #   run: |
       #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
       #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
-      - name: 输出config.json文件
-        run: |
-          index=./${{ env.DIST_DIR }}/index.php
-          chmod +x $index
-          php $index
-          mkdir -p ${{ env.DIST_DIR }}
-          cp ${{ env.DIST_CONFIG }} ${{ env.DIST_DIR }}
+      - name: 解析配置
+        run: php index.php
+        env:
+          GFW_FEED_URL: ${{ secrets.GFW_FEED_URL }}
+          GFW_KEY: ${{ secrets.GFW_KEY }}
 
       - name: 提交文件
         run: |
+          mkdir -p ${{ env.DIST_DIR }}
+          cp ${{ env.DIST_CONFIG }} ${{ env.DIST_DIR }}
           cd ${{ env.DIST_DIR }} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"

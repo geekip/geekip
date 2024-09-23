@@ -333,7 +333,7 @@ function Get_base_config() {
   // 获取基础配置
   $config = Make_base_config();
   $config['countries'] = $feed['countries'];
-  $config['proxies'] = $feed['proxies'];
+  $config['feed_proxies'] = $feed['proxies'];
   $config['userinfo'] = $feed['userinfo'];
 
   // 将国际节点添加到代理组

@@ -16,6 +16,7 @@ env:
   CN_DOMAIN_URL: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   CN_DOMAIN_ACL4_URL: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
   WORKSPACE: "gfw"
+  SRC_FEED: "feed.source.yaml"
   SRC_CN: "cn.txt"
   DIST_CN: "cn.json"
   DIST_CONFIG: "config"
@@ -32,17 +33,101 @@ jobs:
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
 
+      - name: 安装PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: yaml
+
+      - name: 局域网地址
+        run: |
+          curl -sSL ${LOCAL_URL} > ${{ env.SRC_CN }}
+
+      - name: 苹果中国
+        run: |
+          curl -sSL ${CN_APPLE_URL} >> ${{ env.SRC_CN }}
+
+      - name: 谷歌中国
+        run: |
+          curl -sSL ${CN_GOOGLE_URL} >> ${{ env.SRC_CN }}
+
+      - name: 微软中国
+        run: |
+          curl -sSL ${CN_MICROSOFT_URL} >> ${{ env.SRC_CN }}
+          echo "">> ${{ env.SRC_CN }}
+
+      - name: 中国云服务商ip段
+        run: |
+          curl -sSL ${CN_COMPANY_IP_URL} >> ${{ env.SRC_CN }}
+
+      - name: 中国媒体
+        run: |
+          curl -sSL ${CN_MEDIA_URL} >> ${{ env.SRC_CN }}
+
+      - name: 中国域名
+        run: |
+          curl -sSL ${CN_DOMAIN_ACL4_URL} >> ${{ env.SRC_CN }}
+
+      - name: 中国IP
+        run: |
+          curl -sSL ${CN_IP_URL} | perl -ne '/(.+\/\d+)/ && print "IP-CIDR,$1,no-resolve\n"' >> ${{ env.SRC_CN }}
+
+      - name: 解析合并
+        run: |
+          declare -A files  
+          files[DOMAIN]="domain.yaml"  
+          files[DOMAIN-SUFFIX]="domain_suffix.yaml"  
+          files[DOMAIN-KEYWORD]="keyword.yaml"  
+          files[IP-CIDR]="ip.yaml"  
+            
+          : > "${files[DOMAIN]}"  
+          : > "${files[DOMAIN-SUFFIX]}"  
+          : > "${files[DOMAIN-KEYWORD]}"  
+          : > "${files[IP-CIDR]}"  
+
+          while IFS=',' read -r prefix value; do  
+            if [[ -n "$prefix" && -n "${files[$prefix]}" ]]; then  
+              file="${files[$prefix]}"
+              if [[ "$prefix" == "IP-CIDR"* ]]; then  
+                value=$(echo "$value" | cut -d',' -f1)
+                if [[ $value =~ ([0-9.]+)/([0-9]+) ]]; then  
+                  ip=${BASH_REMATCH[1]}  
+                  prefix_length=${BASH_REMATCH[2]}  
+                  echo "- [$ip,$prefix_length]" >> "$file"
+                fi
+              else
+                echo "- $value" >> "$file"
+              fi     
+            fi  
+          done < "${{ env.SRC_CN }}"
+
+          echo ""> ${{ env.DIST_CN }}
+          yq -o json -I 0 -i 'load("domain.yaml") as $f | .domain=$f ' ${{ env.DIST_CN }}
+          yq -o json -I 0 -i 'load("domain_suffix.yaml") as $f | .domain_suffix=$f ' ${{ env.DIST_CN }}
+          yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' ${{ env.DIST_CN }}
+          yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' ${{ env.DIST_CN }}
+
+          echo "<?php define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
+
+      # - name: Generate CN_DOMAIN_URL
+      #   run: |
+      #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+      #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+
       - name: 下载订阅
         run: |
-          curl -s -H "User-Agent: clash" -i "${{ secrets.GFW_FEED_URL }}" > "feed.source.yaml"
-          if [ $? -ne 0 ]; then
-            echo "订阅更新失败，请检查相关服务"	
+          curl -s -H "User-Agent: clash" -i "${{ secrets.GFW_FEED_URL }}" > ${{ env.SRC_FEED }}
+          if [ -e "${{ env.SRC_FEED }}" ]; then 
+            cp ${{ env.SRC_FEED }} ${{ env.WORKSPACE }}
           fi
+
+      - name: 解析配置
+        run: php run.php
 
       - name: 提交文件
         run: |
-          cp feed.source.yaml ${{ env.WORKSPACE }}
           cd ${{ env.WORKSPACE }} || exit 1
+          rm -rf ${{ env.SRC_FEED }}
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add .

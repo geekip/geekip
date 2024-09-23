@@ -106,12 +106,20 @@ jobs:
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' ${{ env.DIST_CN }}
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' ${{ env.DIST_CN }}
 
-          echo "<?php define('FEED_URL', '${{ secrets.GFW_FEED_URL }}');define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
+          echo "<?php define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
 
       # - name: Generate CN_DOMAIN_URL
       #   run: |
       #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
       #     curl -sSL ${CN_DOMAIN_URL} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "- $2\n"' >> domain.yaml
+
+      - name: 下载订阅
+        run: |
+          curl -s -H "User-Agent: clash" -i "${{ secrets.GFW_FEED_URL }}" > "feed.source.yaml"
+          if [ $? -ne 0 ]; then
+            echo "订阅更新失败，请检查相关服务"	
+          fi
+
       - name: 解析配置
         run: php run.php
 

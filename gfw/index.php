@@ -76,22 +76,6 @@ function Trim_emoji($str) {
   }, $str));
 }
 
-function Download_file($opt=[]) {
-  $fh = fopen($opt['file'], 'w');
-  if (!$fh) return false;
-  $ch = curl_init($opt['url']); 
-  $opts=[CURLOPT_FILE => $fh, CURLOPT_FOLLOWLOCATION => true];
-  foreach ($opt['opts'] as $key => $val) {
-    $opts[$key] = $val;
-  }
-  curl_setopt_array($ch, $opts);
-  curl_exec($ch);
-  $isError = curl_errno($ch);
-  curl_close($ch);
-  fclose($fh);
-  return !$isError;
-}
-
 function Array2json($arr) {
   return json_encode($arr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
@@ -300,22 +284,6 @@ function Make_base_config() {
 }
 
 function Get_feed_config() {
-  // 获取订阅
-  if(FEED_URL && FEED_URL!=''){
-    $fh = fopen(FEED_SOURCE, 'w');
-    if (!$fh) return false;
-    $ch = curl_init($feed_url); 
-    curl_setopt_array($ch, [
-      CURLOPT_FILE => $fh, 
-      CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_HEADER => true,
-      CURLOPT_HTTPHEADER => ['User-Agent: clash']
-    ]);
-    curl_exec($ch);
-    $isError = curl_errno($ch);
-    curl_close($ch);
-    fclose($fh);
-  }
   $config = ['countries' => [],'proxies' => [],'rules' => [],'userinfo' => ['update' => time()]];
   if(!file_exists(FEED_SOURCE)) return $config;
   $feed_scource = file_get_contents(FEED_SOURCE);

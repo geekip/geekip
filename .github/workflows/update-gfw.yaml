@@ -106,7 +106,7 @@ jobs:
           yq -o json -I 0 -i 'load("domain_suffix.yaml") as $f | .domain_suffix=$f ' ${{ env.DIST_CN }}
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' ${{ env.DIST_CN }}
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' ${{ env.DIST_CN }}
-
+          cp ${{ env.DIST_CN }} ${{ env.WORKSPACE }}
           echo "<?php define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
 
       # - name: Generate CN_DOMAIN_URL
@@ -127,7 +127,7 @@ jobs:
       - name: 提交文件
         run: |
           cd ${{ env.WORKSPACE }} || exit 1
-          rm -rf ${{ env.SRC_FEED }}
+          rm -rf ${{ env.SRC_FEED }} ${{ env.DIST_CN }}
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add .

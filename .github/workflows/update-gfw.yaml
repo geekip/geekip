@@ -1,4 +1,4 @@
-name: Update Pac Ruleset
+name: Update GFW
 
 on:
   workflow_dispatch:

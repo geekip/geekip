@@ -2,14 +2,18 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
+define('FEED_URL', $_ENV['GFW_FEED_URL']);
+
+define('KEY', $_ENV['GFW_KEY']);
+
 // 基础配置文件
-define('BASE_CONFIG_FILE', 'base.yaml');
+define('BASE_CONFIG_FILE',  __DIR__ . 'base.yaml');
 // 基础配置缓存文件
-define('CONFIG_FILE', 'config');
+define('CONFIG_FILE',  __DIR__ . 'config');
 // 订阅缓存文件
-define('FEED_SOURCE', 'feed.source.yaml');
+define('FEED_SOURCE',  __DIR__ . 'feed.source.yaml');
 // 中国规则
-define('RULES_CN_CACHE', 'cn.json');
+define('RULES_CN_CACHE',  __DIR__ . 'cn.json');
 
 // 节点国家
 define('COUNTRIES', [
@@ -295,9 +299,9 @@ function Make_base_config() {
   return $config;
 }
 
-function Get_feed_config($feed_url) {
+function Get_feed_config() {
   // 获取订阅
-  if(!file_exists(FEED_SOURCE) && $feed_url && $feed_url!=''){
+  if(!file_exists(FEED_SOURCE) && FEED_URL && FEED_URL!=''){
     $fh = fopen(FEED_SOURCE, 'w');
     if (!$fh) return false;
     $ch = curl_init($feed_url); 
@@ -355,11 +359,8 @@ function Get_feed_config($feed_url) {
 }
 
 // 缓存订阅
-function Get_base_config($feed_url, $key) {
-  if($feed_url && $feed_url!='') $feed_url = urldecode($feed_url);
-  if($key && $key!='') $key = urldecode($key);
-
-  $feed = Get_feed_config($feed_url);
+function Get_base_config() {
+  $feed = Get_feed_config();
   
   // 获取基础配置
   $config = Make_base_config();
@@ -391,8 +392,10 @@ function Get_base_config($feed_url, $key) {
   // 替换占位符
   $subscription = Extract_subscription_info($feed['userinfo']);
   $json = str_replace("订阅信息", $subscription, Array2json($config));
-  $json = encrypt($json, $key);
-
+  if(KEY && KEY!=''){
+    $json = encrypt($json, KEY);
+  }
+  
   // 写入缓存
   file_put_contents(CONFIG_FILE, $json);
 }
@@ -404,16 +407,17 @@ function encrypt($data, $key) {
   return base64_encode($encrypted . '::' . $iv);
 }
 
-function getClientArgs(){
-  global $argv;
-  array_shift($argv);
-  $args = array();
-  array_walk($argv, function($v ,$k) use(&$args){
-    @list($key, $value) = @explode('=', $v);
-    $args[$key] = $value;
-  });
-  return $args;
-}
+// function getClientArgs(){
+//   global $argv;
+//   array_shift($argv);
+//   $args = array();
+//   array_walk($argv, function($v ,$k) use(&$args){
+//     @list($key, $value) = @explode('=', $v);
+//     $args[$key] = $value;
+//   });
+//   return $args;
+// }
 
-$args = getClientArgs();
-Get_base_config($args['feedurl'],$args['key']);
+// $args = getClientArgs();
+// Get_base_config($args['feedurl'],$args['key']);
+Get_base_config();

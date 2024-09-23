@@ -15,6 +15,7 @@ env:
   CN_IP_URL: "https://www.ipdeny.com/ipblocks/data/aggregated/cn-aggregated.zone"
   CN_DOMAIN_URL: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   CN_DOMAIN_ACL4_URL: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
+  WORKSPACE: "gfw"
   SRC_CN: ".cache-cn.txt"
   DIST_CN: ".cache-cn.json"
   DIST_CONFIG: "config"
@@ -116,10 +117,14 @@ jobs:
 
       - name: 提交文件
         run: |
-          ls -R
-          git diff
+          cd ${{ env.WORKSPACE }} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
-          git add config
-          git commit -m "auto update config"
+          git add .
+          git commit -m "auto update"
           git push
+
+      - name: 推送到jsdelivr CDN
+        run: |
+          cd ${{ env.DIST_DIR }} || exit 1
+          curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${{ env.DIST_DIR }}/${{ env.DIST_CONFIG }}"

@@ -129,6 +129,7 @@ jobs:
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add config
+          git add feed.source.yaml
           git commit -m "auto update"
           git push
 

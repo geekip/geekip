@@ -16,9 +16,9 @@ env:
   CN_DOMAIN_URL: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   CN_DOMAIN_ACL4_URL: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
   WORKSPACE: "${GITHUB_WORKSPACE}/gfw"
-  SRC_FEED: "/tmp/gfw/feed.source.yaml"
-  SRC_CN: "/tmp/gfw/cn.txt"
-  DIST_CN: "/tmp/gfw/cn.json"
+  SRC_FEED: "${GITHUB_WORKSPACE}/gfw/.cache/feed.source.yaml"
+  SRC_CN: "${GITHUB_WORKSPACE}/gfw/.cache/cn.txt"
+  DIST_CN: "${GITHUB_WORKSPACE}/gfw/.cache/cn.json"
   DIST_CONFIG: "${GITHUB_WORKSPACE}/gfw/config"
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
-          sudo mkdir -p /tmp/gfw
+          sudo mkdir -p ${GITHUB_WORKSPACE}/gfw/.cache
 
       - name: 安装PHP
         uses: shivammathur/setup-php@v2

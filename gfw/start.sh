@@ -3,10 +3,10 @@
 SRC_FEED=$CACHE_DIR/feed.source.yaml
 SRC_CN=$CACHE_DIR/cn.txt
 DIST_CN=$CACHE_DIR/cn.json
-DIST_CONFIG=${env.WORKSPACE}/config
+DIST_CONFIG=$WORKSPACE/config
 
 
-sudo mkdir $CACHE_DIR
+sudo mkdir -p $CACHE_DIR
 sudo chmod 777 $CACHE_DIR
 echo $(date +"%Y-%m-%d %H:%M:%S")
 

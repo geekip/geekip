@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
-
+          
       - name: 安装PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -37,6 +37,7 @@ jobs:
 
       - name: 提交文件
         run: |
+          cd ${{ env.WORKSPACE }} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add .

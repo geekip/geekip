@@ -31,7 +31,9 @@ jobs:
           extensions: yaml
 
       - name: 执行脚本
-        run: chmod +x ./start.sh && bash ./start.sh
+        run: |
+          chmod +x ./start.sh
+          bash ./start.sh
 
       - name: 提交文件
         run: |

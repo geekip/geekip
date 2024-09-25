@@ -8,7 +8,7 @@ DIST_CONFIG=$WORKSPACE/config
 
 sudo mkdir -p $CACHE_DIR
 sudo chmod 777 $CACHE_DIR
-echo $(date +"%Y-%m-%d %H:%M:%S")
+# echo $(date +"%Y-%m-%d %H:%M:%S")
 
 # 局域网地址
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list" > $SRC_CN

@@ -15,11 +15,11 @@ env:
   CN_IP_URL: "https://www.ipdeny.com/ipblocks/data/aggregated/cn-aggregated.zone"
   CN_DOMAIN_URL: "https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt"
   CN_DOMAIN_ACL4_URL: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
-  WORKSPACE: "gfw"
-  SRC_FEED: "feed.source.yaml"
-  SRC_CN: "cn.txt"
-  DIST_CN: "cn.json"
-  DIST_CONFIG: "config"
+  WORKSPACE: "${GITHUB_WORKSPACE}/gfw"
+  SRC_FEED: "/tmp/gfw/feed.source.yaml"
+  SRC_CN: "/tmp/gfw/cn.txt"
+  DIST_CN: "/tmp/gfw/cn.json"
+  DIST_CONFIG: "${GITHUB_WORKSPACE}/gfw/config"
 
 jobs:
   build:
@@ -107,7 +107,15 @@ jobs:
           yq -o json -I 0 -i 'load("keyword.yaml") as $f | .keyword=$f ' ${{ env.DIST_CN }}
           yq -o json -I 0 -i 'load("ip.yaml") as $f | .ip=$f ' ${{ env.DIST_CN }}
 
-          echo "<?php define('KEY', '${{ secrets.GFW_KEY }}');require_once '${GITHUB_WORKSPACE}/gfw/index.php';?>" > run.php 
+          echo "
+          <?php 
+            define('KEY', '${{ secrets.GFW_KEY }}');
+            define('CONFIG_FILE', '${{ env.DIST_CONFIG }}');
+            define('FEED_SOURCE', '${{ env.SRC_FEED }}');
+            define('RULES_CN_CACHE', '${{ env.DIST_CN }}');
+            require_once '${{ env.WORKSPACE }}/index.php';
+          ?>
+          " > run.php 
 
       # - name: Generate CN_DOMAIN_URL
       #   run: |
@@ -117,9 +125,6 @@ jobs:
       - name: 下载订阅
         run: |
           curl -s -H "User-Agent: clash" -i "${{ secrets.GFW_FEED_URL }}" > ${{ env.SRC_FEED }}
-          if [ -e "${{ env.SRC_FEED }}" ]; then 
-            cp ${{ env.SRC_FEED }} ${{ env.WORKSPACE }}
-          fi
 
       - name: 解析配置
         run: php run.php
@@ -127,7 +132,8 @@ jobs:
       - name: 提交文件
         run: |
           cd ${{ env.WORKSPACE }} || exit 1
-          rm -rf ${{ env.SRC_FEED }}
+          cp ${{ env.SRC_CN }} ${{ env.WORKSPACE }}
+          cp ${{ env.DIST_CN }} ${{ env.WORKSPACE }}
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add .

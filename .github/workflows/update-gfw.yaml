@@ -31,12 +31,12 @@ jobs:
 
       - name: 执行脚本
         run: |
-          chmod +x ./start.sh
-          bash ./start.sh
+          chmod +x ${{env.WORKSPACE}}/start.sh
+          bash ${{env.WORKSPACE}}/start.sh
 
       - name: 提交文件
         run: |
-          cd ${{ env.WORKSPACE }} || exit 1
+          cd ${{env.WORKSPACE}} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"
           git add .

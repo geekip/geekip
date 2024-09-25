@@ -71,3 +71,5 @@ php -r "
   define('RULES_CN_CACHE', '${DIST_CN}');
   require_once '${WORKSPACE}/start.php';
 "
+
+rm -rf $CACHE_DIR

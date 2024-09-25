@@ -5,6 +5,7 @@ SRC_CN=$CACHE_DIR/cn.txt
 DIST_CN=$CACHE_DIR/cn.json
 DIST_CONFIG=${env.WORKSPACE}/config
 
+
 sudo mkdir $CACHE_DIR
 sudo chmod 777 $CACHE_DIR
 echo $(date +"%Y-%m-%d %H:%M:%S")

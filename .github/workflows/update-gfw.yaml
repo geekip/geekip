@@ -32,6 +32,7 @@ jobs:
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
+          sudo mkdir -p /tmp/gfw
 
       - name: 安装PHP
         uses: shivammathur/setup-php@v2

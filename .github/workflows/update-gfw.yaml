@@ -6,8 +6,8 @@ on:
     - cron: '0 6 * * *'
 
 env:
-  WORKSPACE: "${{GITHUB_WORKSPACE}}/gfw"
-  CACHE_DIR: "${{GITHUB_WORKSPACE}}/gfw/.cache"
+  WORKSPACE: "./gfw"
+  CACHE_DIR: "./gfw/.cache"
   GFW_FEED_URL: "${{secrets.GFW_FEED_URL}}"
   GFW_KEY: "${{secrets.GFW_KEY}}"
 

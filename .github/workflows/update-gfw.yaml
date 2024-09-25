@@ -9,6 +9,7 @@ env:
   WORKSPACE: "./gfw"
   CACHE_DIR: "./gfw/.cache"
   GFW_FEED_URL: "${{secrets.GFW_FEED_URL}}"
+  GFW_EN_TYPE: "${{secrets.GFW_EN_TYPE}}"
   GFW_KEY: "${{secrets.GFW_KEY}}"
 
 jobs:
@@ -36,6 +37,7 @@ jobs:
 
       - name: 提交文件
         run: |
+          rm -rf ${{env.CACHE_DIR}}
           cd ${{env.WORKSPACE}} || exit 1
           git config --global user.email "mail@yangfei.site"
           git config --global user.name "geekip"

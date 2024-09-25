@@ -3,6 +3,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 date_default_timezone_set('Asia/Shanghai');
 
+// 加密方式
+if (!defined("EN_TYPE")) define("EN_TYPE", 'aes-256-cbc');
+
 // 基础配置文件
 define('BASE_CONFIG_FILE',  __DIR__ . '/base.yaml');
 
@@ -360,8 +363,8 @@ function Get_base_config() {
 
 // 加密
 function encrypt($data, $key) {
-  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-  $encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));
+  $encrypted = openssl_encrypt($data, EN_TYPE, $key, 0, $iv);
   return base64_encode($encrypted . '::' . $iv);
 }
 

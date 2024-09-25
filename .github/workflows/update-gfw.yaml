@@ -18,12 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3.1.0
 
-    steps:
       - name: 准备环境
         run: |
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
-          
+
       - name: 安装PHP
         uses: shivammathur/setup-php@v2
         with:

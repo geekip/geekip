@@ -34,7 +34,7 @@ curl -s -H "User-Agent: clash" -i "${GFW_FEED_URL}" > $SRC_FEED
 declare -A files  
 files[DOMAIN]="${CACHE_DIR}/domain.yaml"  
 files[DOMAIN-SUFFIX]="${CACHE_DIR}/domain_suffix.yaml"  
-files[DOMAIN-KEYWORD]="${CACHE_DIR}/keyword.yaml"  
+files[DOMAIN-KEYWORD]="${CACHE_DIR}/keyword.yaml"
 files[IP-CIDR]="${CACHE_DIR}/ip.yaml"  
   
 : > "${files[DOMAIN]}"  

@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
+date_default_timezone_set('Asia/Shanghai');
 
 // 基础配置文件
 define('BASE_CONFIG_FILE',  __DIR__ . '/base.yaml');

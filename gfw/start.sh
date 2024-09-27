@@ -5,8 +5,6 @@ SRC_CN=$CACHE_DIR/cn.txt
 DIST_CN=$CACHE_DIR/cn.json
 DIST_CONFIG=$WORKSPACE/config
 
-sudo mkdir -p $CACHE_DIR && sudo chmod 777 $CACHE_DIR
-
 # 局域网地址
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list" > $SRC_CN
 # 苹果中国

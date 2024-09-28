@@ -356,11 +356,9 @@ function Get_base_config() {
   $json = str_replace("订阅信息", $subscription, Array2json($config));
   if(KEY && KEY!=''){
     $json = encrypt($json, KEY);
+    // 写入缓存
+    file_put_contents(CONFIG_FILE, $json);
   }
-
-  // 写入缓存
-  file_put_contents(CONFIG_FILE, $json);
-
   return $config;
 }
 

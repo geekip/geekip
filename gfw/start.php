@@ -9,6 +9,8 @@ if (!defined("EN_TYPE")) define("EN_TYPE", 'aes-256-cbc');
 // 基础配置文件
 define('BASE_CONFIG_FILE',  __DIR__ . '/base.yaml');
 
+define('PAC_TPL_FILE', __DIR__ . '/pac.js');
+
 // 节点国家
 define('COUNTRIES', [
   '香港','台湾','澳门','美国','日本','新加坡','韩国','泰国','柬埔寨','越南','印尼',
@@ -346,7 +348,7 @@ function Get_base_config() {
   if(isset($feed['rules']) && count($feed['rules'])){
     $rules = MergeRules($rules, Formate_rules($feed['rules']));
   }
-  
+   
   // 去重排序
   $config['rules'] = Remove_multiple_rules($rules);
 
@@ -359,6 +361,8 @@ function Get_base_config() {
   
   // 写入缓存
   file_put_contents(CONFIG_FILE, $json);
+
+  return $config;
 }
 
 // 加密
@@ -368,4 +372,7 @@ function encrypt($data, $key) {
   return base64_encode($encrypted . '::' . $iv);
 }
 
-Get_base_config();
+require_once __DIR__ . '/pac.php';
+$base_config = Get_base_config();
+$PAC = new Pac($base_config);
+

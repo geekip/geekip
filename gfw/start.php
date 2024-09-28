@@ -352,7 +352,7 @@ function Get_base_config() {
   $config['rules'] = Remove_multiple_rules($rules);
 
   // 替换占位符
-  $subscription = Extract_subscription_info($feed['userinfo']);
+  $subscription = Extract_subscription_info($config['userinfo']);
   $json = str_replace("订阅信息", $subscription, Array2json($config));
   if(KEY && KEY!=''){
     $json = encrypt($json, KEY);

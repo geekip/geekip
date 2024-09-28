@@ -1,9 +1,7 @@
 <?php
 class Pac{
   public function __construct(array $base=[]) {
-    echo 123;
     $config = $this->make_config($base);
-    echo 456;
     file_put_contents(__DIR__ . '/pac', $config);
   }
   // 将ip和子网掩码拆分为数组

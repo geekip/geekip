@@ -10,17 +10,16 @@ class Clash{
   }
 
   public function make_config($base = []) {
-  
-    // 保留配置项
-    $keys = ['mixed-port','allow-lan','bind-address','mode','log-level','external-controller','secret','experimental','profile','tcp-concurrent','dns'];
     $config = [];
-    
+    // 保留配置项
+    $keys = [
+      'mixed-port','allow-lan','tun', 'bind-address','mode','log-level','tcp-concurrent',
+      'external-ui','external-controller','secret','experimental','profile','dns'
+    ];
     foreach ($keys as $key) {
       if(isset($base[$key])) $config[$key] = $base[$key];
     }
-    $config['tun'] = $base['tun'];
-    $config['external-ui'] = $base['external-ui'];
-    
+
     // 测试节点
     $urltest = [];
   

@@ -354,11 +354,11 @@ function Get_base_config() {
   // 替换占位符
   $subscription = Extract_subscription_info($config['userinfo']);
   $json = str_replace("订阅信息", $subscription, Array2json($config));
-  if(KEY && KEY!=''){
-    $content = encrypt($json, KEY);
-    // 写入缓存
-    file_put_contents(DIST_DIR . '/config.json', $content);
-  }
+  // if(KEY && KEY!=''){
+  //   $content = encrypt($json, KEY);
+  //   // 写入缓存
+  //   file_put_contents(DIST_DIR . '/config.json', $content);
+  // }
   return yaml_parse($json);
 }
 

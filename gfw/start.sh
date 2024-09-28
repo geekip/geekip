@@ -3,7 +3,7 @@ CACHE_DIR="$2"
 GFW_EN_TYPE="$3"
 GFW_KEY="$4"
 GFW_FEED_URL="$5"
-SRC_FEED="${WORKSPACE}/feed.source.yaml"
+SRC_FEED="${CACHE_DIR}/feed.source.yaml"
 SRC_CN="${CACHE_DIR}/cn.txt"
 DIST_CN="${CACHE_DIR}/cn.json"
 DIST_CONFIG="${WORKSPACE}/config"
@@ -64,7 +64,7 @@ yq -o json -I 0 -i 'load("'${files[DOMAIN-KEYWORD]}'") as $f | .keyword=$f ' $DI
 yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 
 # 执行php脚本
-php -r "
+code="
   define('EN_TYPE', '${GFW_EN_TYPE}');
   define('KEY', '${GFW_KEY}');
   define('CONFIG_FILE', '${DIST_CONFIG}');
@@ -72,3 +72,5 @@ php -r "
   define('RULES_CN_CACHE', '${DIST_CN}');
   require_once '${START_PHP}';
 "
+echo $code
+php -r $code

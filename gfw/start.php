@@ -324,7 +324,6 @@ function Get_feed_config() {
 // 缓存订阅
 function Get_base_config() {
   $feed = Get_feed_config();
-  
   // 获取基础配置
   $config = Make_base_config();
   $config['countries'] = $feed['countries'];
@@ -358,7 +357,7 @@ function Get_base_config() {
   if(KEY && KEY!=''){
     $json = encrypt($json, KEY);
   }
-  
+
   // 写入缓存
   file_put_contents(CONFIG_FILE, $json);
 
@@ -374,5 +373,5 @@ function encrypt($data, $key) {
 
 require_once __DIR__ . '/pac.php';
 $base_config = Get_base_config();
-$PAC = new Pac($base_config);
+new Pac($base_config);
 

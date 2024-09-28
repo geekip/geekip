@@ -64,7 +64,7 @@ yq -o json -I 0 -i 'load("'${files[DOMAIN-KEYWORD]}'") as $f | .keyword=$f ' $DI
 yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 
 # 执行php脚本
-code="
+php -r "
   define('EN_TYPE', '${GFW_EN_TYPE}');
   define('KEY', '${GFW_KEY}');
   define('CONFIG_FILE', '${DIST_CONFIG}');
@@ -72,5 +72,3 @@ code="
   define('RULES_CN_CACHE', '${DIST_CN}');
   require_once '${START_PHP}';
 "
-echo $code
-php -r $code

@@ -3,7 +3,7 @@ name: Update GFW
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 22 * * *' #UTC-8=6
 
 env:
   WORKSPACE: "./gfw"
@@ -32,8 +32,10 @@ jobs:
 
       - name: 执行脚本
         run: |
-          chmod +x ${{env.WORKSPACE}}/start.sh
-          bash ${{env.WORKSPACE}}/start.sh
+          sudo mkdir -p ${{env.CACHE_DIR}}
+          sudo chmod 777 ${{env.CACHE_DIR}}
+          sudo chmod +x ${{env.WORKSPACE}}/start.sh
+          sudo bash ${{env.WORKSPACE}}/start.sh
 
       - name: 提交文件
         run: |

@@ -66,5 +66,5 @@ php -r "
   define('CONFIG_FILE', '$DIST_CONFIG');
   define('FEED_SOURCE', '$SRC_FEED');
   define('RULES_CN_CACHE', '$DIST_CN');
-  require_once '$WORKSPACE/start.php';
+  require_once './start.php';
 "

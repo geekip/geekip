@@ -35,7 +35,7 @@ jobs:
           sudo mkdir -p ${{env.CACHE_DIR}}
           sudo chmod 777 ${{env.CACHE_DIR}}
           sudo chmod +x ${{env.WORKSPACE}}/start.sh
-          sudo bash ${{env.WORKSPACE}}/start.sh
+          sudo bash ${{env.WORKSPACE}}/start.sh 
 
       - name: 提交文件
         run: |

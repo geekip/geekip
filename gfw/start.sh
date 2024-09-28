@@ -1,11 +1,11 @@
-# WORKSPACE="./"
-# CACHE_DIR="./cache"
+WORKSPACE="${{env.WORKSPACE}}"
+CACHE_DIR="${{env.CACHE_DIR}}"
 SRC_FEED=$CACHE_DIR/feed.source.yaml
 SRC_CN=$CACHE_DIR/cn.txt
 DIST_CN=$CACHE_DIR/cn.json
 DIST_CONFIG=$WORKSPACE/config
 START_PHP=$WORKSPACE/start.php
-echo $START_PHP
+echo $SRC_FEED
 
 # 局域网地址
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list" > $SRC_CN
@@ -25,7 +25,7 @@ curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaD
 # 中国IP
 curl -sSL "https://www.ipdeny.com/ipblocks/data/aggregated/cn-aggregated.zone" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR,$1,no-resolve\n"' >> $SRC_CN
 # 下载订阅
-curl -s -H "User-Agent: clash" -i "${GFW_FEED_URL}" > $SRC_FEED
+curl -s -H "User-Agent: clash" -i "${{env.GFW_FEED_URL}}" > $SRC_FEED
 
 # 解析合并白名单
 declare -A files  
@@ -63,10 +63,10 @@ yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 
 # 执行php脚本
 php -r "
-  define('EN_TYPE', '$GFW_EN_TYPE');
-  define('KEY', '$GFW_KEY');
+  define('EN_TYPE', '${{env.GFW_EN_TYPE}}');
+  define('KEY', '${{env.GFW_KEY}}');
   define('CONFIG_FILE', '$DIST_CONFIG');
   define('FEED_SOURCE', '$SRC_FEED');
   define('RULES_CN_CACHE', '$DIST_CN');
-  require_once '$START_PHP';
+  require_once '$WORKSPACE/start.php';
 "

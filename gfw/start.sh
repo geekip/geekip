@@ -61,10 +61,10 @@ yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 
 # 执行php脚本
 php -r "
-  define('EN_TYPE', '${GFW_EN_TYPE}');
-  define('KEY', '${GFW_KEY}');
-  define('CONFIG_FILE', '${DIST_CONFIG}');
-  define('FEED_SOURCE', '${SRC_FEED}');
-  define('RULES_CN_CACHE', '${DIST_CN}');
-  require_once '${WORKSPACE}/start.php';
+  define('EN_TYPE', '$GFW_EN_TYPE');
+  define('KEY', '$GFW_KEY');
+  define('CONFIG_FILE', '$DIST_CONFIG');
+  define('FEED_SOURCE', '$SRC_FEED');
+  define('RULES_CN_CACHE', '$DIST_CN');
+  require_once '$WORKSPACE/start.php';
 "

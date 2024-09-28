@@ -8,6 +8,7 @@ on:
 env:
   WORKSPACE: "./gfw"
   CACHE_DIR: "./gfw/.cache"
+  DIST_DIR: "./gfw/dist"
   GFW_FEED_URL: "${{secrets.GFW_FEED_URL}}"
   GFW_EN_TYPE: "${{secrets.GFW_EN_TYPE}}"
   GFW_KEY: "${{secrets.GFW_KEY}}"
@@ -32,10 +33,10 @@ jobs:
 
       - name: 执行脚本
         run: |
-          sudo mkdir -p ${{env.CACHE_DIR}}
-          sudo chmod 777 ${{env.CACHE_DIR}}
+          sudo mkdir -p ${{env.CACHE_DIR}} ${{env.DIST_DIR}}
+          sudo chmod 777 ${{env.CACHE_DIR}} ${{env.DIST_DIR}}
           sudo chmod +x ${{env.WORKSPACE}}/start.sh
-          sudo bash ${{env.WORKSPACE}}/start.sh "${{env.WORKSPACE}}" "${{env.CACHE_DIR}}" "${{env.GFW_EN_TYPE}}" "${{env.GFW_KEY}}" "${{env.GFW_FEED_URL}}"
+          sudo bash ${{env.WORKSPACE}}/start.sh "${{env.WORKSPACE}}" "${{env.CACHE_DIR}}" "${{env.DIST_DIR}}" "${{env.GFW_EN_TYPE}}" "${{env.GFW_KEY}}" "${{env.GFW_FEED_URL}}"
 
       - name: 提交文件
         run: |

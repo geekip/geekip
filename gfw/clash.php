@@ -5,7 +5,7 @@ class Clash{
     if(KEY && KEY!=''){
       $content = encrypt($config, KEY);
       // 写入缓存
-      file_put_contents(__DIR__ . '/dist/clash.txt', $content);
+      file_put_contents(DIST_DIR . '/clash.txt', $content);
     }
   }
 

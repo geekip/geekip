@@ -357,7 +357,7 @@ function Get_base_config() {
   if(KEY && KEY!=''){
     $content = encrypt($json, KEY);
     // 写入缓存
-    file_put_contents(__DIR__ . '/dist/config.txt', $content);
+    file_put_contents(DIST_DIR . '/config.txt', $content);
   }
   return yaml_parse($json);
 }

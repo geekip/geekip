@@ -2,7 +2,7 @@
 class Pac{
   public function __construct(array $base=[]) {
     $config = $this->make_config($base);
-    file_put_contents(__DIR__ . '/dist/pac.js', $config);
+    file_put_contents(DIST_DIR . '/pac.js', $config);
   }
   // 将ip和子网掩码拆分为数组
   public function getIps($ips) {

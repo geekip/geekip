@@ -1,8 +1,9 @@
 WORKSPACE="$1"
 CACHE_DIR="$2"
-GFW_EN_TYPE="$3"
-GFW_KEY="$4"
-GFW_FEED_URL="$5"
+DIST_DIR="$3"
+GFW_EN_TYPE="$4"
+GFW_KEY="$5"
+GFW_FEED_URL="$6"
 SRC_FEED="${CACHE_DIR}/feed.source.yaml"
 SRC_CN="${CACHE_DIR}/cn.txt"
 DIST_CN="${CACHE_DIR}/cn.json"
@@ -64,6 +65,8 @@ yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 
 # 执行php脚本
 php -r "
+  define('CACHE_DIR', '${CACHE_DIR}');
+  define('DIST_DIR', '${DIST_DIR}');
   define('EN_TYPE', '${GFW_EN_TYPE}');
   define('KEY', '${GFW_KEY}');
   define('FEED_SOURCE', '${SRC_FEED}');

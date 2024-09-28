@@ -355,11 +355,11 @@ function Get_base_config() {
   $subscription = Extract_subscription_info($config['userinfo']);
   $json = str_replace("订阅信息", $subscription, Array2json($config));
   if(KEY && KEY!=''){
-    $json = encrypt($json, KEY);
+    $content = encrypt($json, KEY);
     // 写入缓存
-    file_put_contents(CONFIG_FILE, $json);
+    file_put_contents(__DIR__ . '/dist/config.txt', $content);
   }
-  return $config;
+  return yaml_parse($json);
 }
 
 // 加密
@@ -369,7 +369,9 @@ function encrypt($data, $key) {
   return base64_encode($encrypted . '::' . $iv);
 }
 
+require_once __DIR__ . '/clash.php';
 require_once __DIR__ . '/pac.php';
 $base_config = Get_base_config();
+new Clash($base_config);
 new Pac($base_config);
 

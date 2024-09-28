@@ -6,7 +6,6 @@ GFW_FEED_URL="$5"
 SRC_FEED="${CACHE_DIR}/feed.source.yaml"
 SRC_CN="${CACHE_DIR}/cn.txt"
 DIST_CN="${CACHE_DIR}/cn.json"
-DIST_CONFIG="${WORKSPACE}/config"
 START_PHP="${WORKSPACE}/start.php"
 
 # 局域网地址
@@ -67,7 +66,6 @@ yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' $DIST_CN
 php -r "
   define('EN_TYPE', '${GFW_EN_TYPE}');
   define('KEY', '${GFW_KEY}');
-  define('CONFIG_FILE', '${DIST_CONFIG}');
   define('FEED_SOURCE', '${SRC_FEED}');
   define('RULES_CN_CACHE', '${DIST_CN}');
   require_once '${START_PHP}';

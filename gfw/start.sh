@@ -4,6 +4,7 @@ SRC_FEED=$CACHE_DIR/feed.source.yaml
 SRC_CN=$CACHE_DIR/cn.txt
 DIST_CN=$CACHE_DIR/cn.json
 DIST_CONFIG=$WORKSPACE/config
+START_PHP=$WORKSPACE/start.php
 
 # 局域网地址
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list" > $SRC_CN
@@ -66,5 +67,5 @@ php -r "
   define('CONFIG_FILE', '$DIST_CONFIG');
   define('FEED_SOURCE', '$SRC_FEED');
   define('RULES_CN_CACHE', '$DIST_CN');
-  require_once './start.php';
+  require_once '$START_PHP';
 "

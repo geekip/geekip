@@ -7,7 +7,7 @@ class Pac{
     file_put_contents(__DIR__ . '/pac', $config);
   }
   // 将ip和子网掩码拆分为数组
-  private function getIps($ips) {
+  public function getIps($ips) {
     $result = [];
     if(is_array($ips)){
       $result = array_map(function($item){
@@ -17,7 +17,7 @@ class Pac{
     }
     return $result;
   }
-  private function getMaskMap() {
+  public function getMaskMap() {
     $maps = [];
     // 子网掩码表
     for ($i = 0; $i <= 32; $i++) {
@@ -26,7 +26,7 @@ class Pac{
     }
     return json_encode($maps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   }
-  private function get_rules($maps=[], $key='') {
+  public function get_rules($maps=[], $key='') {
     $rules = [];
     if(isset($maps[$key])){
       $rules = $maps[$key];
@@ -36,7 +36,7 @@ class Pac{
     return [$rules, $count];
   }
 
-  private function clash2json($rules) {
+  public function clash2json($rules) {
     $result = [];
     foreach ($rules as $item) {
       $type = $item[0];
@@ -72,7 +72,7 @@ class Pac{
     return $result;
   }
 
-  private function make_config($base = []) {
+  public function make_config($base = []) {
     // 白名单规则
     $direct = $base['rules']['direct'];
     $rules = $this->clash2json($direct);

@@ -19,8 +19,7 @@ class Pac{
     $maps = [];
     // 子网掩码表
     for ($i = 0; $i <= 32; $i++) {
-      $mask = long2ip(-1 << (32 - $i)); 
-      $maps[] = $mask;
+      $maps[] = long2ip(-1 << (32 - $i)); 
     }
     return json_encode($maps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   }

@@ -14,7 +14,7 @@ curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalA
 # 苹果中国
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list" >> $SRC_CN
 # 谷歌中国
-curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list" >> $SRC_CN
+# curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list" >> $SRC_CN
 # 微软中国
 curl -sSL "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list" >> $SRC_CN
 echo "">> $SRC_CN

@@ -373,7 +373,9 @@ require_once __DIR__ . '/clash.php';
 require_once __DIR__ . '/singbox.php';
 require_once __DIR__ . '/pac.php';
 $base_config = Get_base_config();
+file_put_contents(DIST_DIR . '/base.json', Array2json($base_config));
 new Clash($base_config);
 new SingBox($base_config);
 new Pac($base_config);
+
 

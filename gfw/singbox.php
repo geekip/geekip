@@ -247,12 +247,10 @@ class SingBox{
     ];
 
     $rule_set = [];
-
     $maps=[];
-
-    foreach ($base['rules'] as $name => $items) {
-      $rs = [];
-      foreach ($items as $item) {
+    unset($base['rules']['final']);
+    foreach ($base['rules'] as $name => $rs) {
+      $rs = array_map(function($item){
         $type = $item[0];
         switch ($type) {
           case 'DOMAIN':
@@ -272,11 +270,12 @@ class SingBox{
             $type = null;
             break;
         }
-        if($type){
-          $item['type'] = $type;
-          $rs[] = $item;
-        }
-      }
+        $item[0] = $type;
+        return $item;
+      },$rs);
+      $rs = array_filter($rs,function($item){
+        return $item[0] != null;
+      });
       if (array_key_exists($name, $maps)) {  
         $maps[$name][] = $rs;
       }else{

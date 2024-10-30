@@ -370,6 +370,7 @@ function encrypt($data, $key) {
 }
 
 require_once __DIR__ . '/clash.php';
+require_once __DIR__ . '/singbox.php';
 require_once __DIR__ . '/pac.php';
 $base_config = Get_base_config();
 new Clash($base_config);

@@ -13,7 +13,7 @@ class SingBox{
     // 转换日志
     $config = ['log' => $this->make_log($base)];
     // 配置DNS
-    $config['dns'] = make_dns($base);
+    $config['dns'] = $this->make_dns($base);
     // 配置入站
     $config['inbounds'] = $this->make_inbounds($base);
     // 配置出站

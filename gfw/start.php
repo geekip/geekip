@@ -364,7 +364,8 @@ function Get_base_config() {
 
 // 加密
 function encrypt($data, $key) {
-  return openssl_encrypt($data, EN_TYPE, $key, 0, 12345678);
+  $iv = hex2bin('34857d973953e44afb49ea9d61104d8c');
+  return openssl_encrypt($data, EN_TYPE, $key, 0, $iv);
 }
 
 $base_config = Get_base_config();

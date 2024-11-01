@@ -367,6 +367,7 @@ function encrypt($data, $key) {
   return openssl_encrypt($data, EN_TYPE, $key, 0, 12345678);
 }
 
+$base_config = Get_base_config();
 require_once __DIR__ . '/clash.php';
 require_once __DIR__ . '/singbox.php';
 require_once __DIR__ . '/pac.php';

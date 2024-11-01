@@ -364,9 +364,7 @@ function Get_base_config() {
 
 // 加密
 function encrypt($data, $key) {
-  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));
-  $encrypted = openssl_encrypt($data, EN_TYPE, $key, 0, $iv);
-  return base64_encode($encrypted . '::' . $iv);
+  return openssl_encrypt($data, EN_TYPE, $key, 0, 12345678);
 }
 
 require_once __DIR__ . '/clash.php';

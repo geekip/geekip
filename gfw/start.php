@@ -363,10 +363,11 @@ function Get_base_config() {
 }
 
 // 加密
-function encrypt($data, $key) {
-  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));
-  $encrypted = openssl_encrypt($data, EN_TYPE, $key, 0, $iv);
-  return base64_encode($encrypted . '::' . $iv);
+function encrypt($data, $key) {  
+  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));  
+  $ciphertext_raw = openssl_encrypt($data, EN_TYPE, $key, $options=OPENSSL_RAW_DATA, $iv);  
+  $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);  
+  return base64_encode( $iv.$hmac.$ciphertext_raw );  
 }
 
 $base_config = Get_base_config();

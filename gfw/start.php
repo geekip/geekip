@@ -362,12 +362,13 @@ function Get_base_config() {
   return yaml_parse($json);
 }
 
-// 加密
-function encrypt($data, $key) {  
-  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));  
-  $ciphertext_raw = openssl_encrypt($data, EN_TYPE, $key, $options=OPENSSL_RAW_DATA, $iv);  
-  $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);  
-  return base64_encode( $iv.$hmac.$ciphertext_raw );  
+function encrypt($data, $key) {
+  $keyLength = strlen($key);
+  $encrypted = '';
+  for ($i = 0; $i < strlen($data); $i++) {
+    $encrypted .= $data[$i] ^ $key[$i % $keyLength];
+  }
+  return base64_encode($encrypted);
 }
 
 $base_config = Get_base_config();

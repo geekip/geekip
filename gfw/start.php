@@ -362,13 +362,11 @@ function Get_base_config() {
   return yaml_parse($json);
 }
 
+// 加密
 function encrypt($data, $key) {
-  $keyLength = strlen($key);
-  $encrypted = '';
-  for ($i = 0; $i < strlen($data); $i++) {
-    $encrypted .= $data[$i] ^ $key[$i % $keyLength];
-  }
-  return base64_encode($encrypted);
+  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(EN_TYPE));
+  $encrypted = openssl_encrypt($data, EN_TYPE, $key, 0, $iv);
+  return base64_encode($encrypted . '::' . $iv);
 }
 
 $base_config = Get_base_config();

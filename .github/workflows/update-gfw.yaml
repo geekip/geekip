@@ -3,7 +3,7 @@ name: Update GFW
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 22 * * *' #UTC-8=6
+    - cron: '0 22 * * 0' #UTC-8=6
 
 jobs:
   build:

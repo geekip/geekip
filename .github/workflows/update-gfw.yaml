@@ -17,12 +17,6 @@ jobs:
           sudo apt update
           sudo timedatectl set-timezone "Asia/Shanghai"
 
-      - name: 安装PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
-          extensions: yaml
-
       - name: 下载列表
         run: |
           # 局域网地址
@@ -71,13 +65,12 @@ jobs:
             fi  
           done < cn.txt
 
-          echo ""> cn.json
-          yq -o json -I 0 -i 'load("'${files[DOMAIN]}'") as $f | .domain=$f ' cn.json
-          yq -o json -I 0 -i 'load("'${files[DOMAIN-SUFFIX]}'") as $f | .domain_suffix=$f ' cn.json
-          yq -o json -I 0 -i 'load("'${files[DOMAIN-KEYWORD]}'") as $f | .keyword=$f ' cn.json
-          yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' cn.json
-
-          php "gfw/make.php"
+          mkdir -p gfw
+          echo ""> gfw/cn.json
+          yq -o json -I 0 -i 'load("'${files[DOMAIN]}'") as $f | .domain=$f ' gfw/cn.json
+          yq -o json -I 0 -i 'load("'${files[DOMAIN-SUFFIX]}'") as $f | .domain_suffix=$f ' gfw/cn.json
+          yq -o json -I 0 -i 'load("'${files[DOMAIN-KEYWORD]}'") as $f | .keyword=$f ' gfw/cn.json
+          yq -o json -I 0 -i 'load("'${files[IP-CIDR]}'") as $f | .ip=$f ' gfw/cn.json
 
       - name: 提交文件
         run: |

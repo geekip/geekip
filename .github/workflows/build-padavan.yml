@@ -77,14 +77,17 @@ jobs:
       - name: Clone source
         run: |
           git clone -b ${{ inputs.branch || 'master' }} ${{ env.repo_url }} ${{ env.source_dir }}
-
+      
       - name: Config target
+        env:
+          TARGET: ${{ inputs.target }}
+          SOURCE_DIR: ${{ env.source_dir }}
         run: |
           DIY_FILE="${GITHUB_WORKSPACE}/padavan/config.sh"
           if [ -f "$DIY_FILE" ]; then
-            chmod +x $DIY_FILE
-            cd ${{ env.source_dir }}
-            sh $DIY_FILE
+            chmod +x "$DIY_FILE"
+            cd "$SOURCE_DIR"
+            bash "$DIY_FILE"
           fi
 
       - name: Prepare toolchain
